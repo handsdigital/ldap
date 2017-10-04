@@ -8,6 +8,7 @@ define("_LDAP_PORT", "389");
 define("_LDAP_OS", "LINUX"); //WINDOWS ou LINUX
 define("_LDAP_USER", "cn=admin,dc=teste,dc=contaminima,dc=com,dc=br");
 define("_LDAP_PASS", "senha");
+define("_LDAP_HASH", "75c9c484b4c04d3a4af8ef64611c3bfc");
 
 /*
  * Filtro para Buscar Colaboradores
