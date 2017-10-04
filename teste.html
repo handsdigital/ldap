@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <div class="container">
+        <div class="col-lg-12 text-center">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">HASH</span>
+                <input type="text" id="hash" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+        </div>
+        
+        
+        <div class="col-lg-4">
+            
+            <h3>Login</h3>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Login</span>
+                <input type="text" id="usuario" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Senha</span>
+                <input type="password" id="senha" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="text-center">
+                <button onclick="login()" class="btn btn-primary">Testar</button>
+            </div>
+
+            <div class="input-group">
+                <label>Retorno</label>
+                <textarea id="loginArea" style="width: 350px; height: 150px;"></textarea>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            
+            <h3>Lista de Usuários</h3>
+
+            
+            <div class="text-center">
+                <button onclick="lista()" class="btn btn-primary">Testar</button>
+            </div>
+
+            <div class="input-group">
+                <label>Retorno</label>
+                <textarea id="listaArea" style="width: 350px; height: 150px;"></textarea>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            
+            <h3>Lista de Grupos</h3>
+
+            
+            <div class="text-center">
+                <button onclick="grupo()" class="btn btn-primary">Testar</button>
+            </div>
+
+            <div class="input-group">
+                <label>Retorno</label>
+                <textarea id="grupoArea" style="width: 350px; height: 150px;"></textarea>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        function login() {
+            
+            $.ajax({
+                type: "POST",
+                url: "index.php?acao=login&usuario="+$("#usuario").val()+"&senha="+$("#senha").val()+"&hash="+$("#hash").val(),
+                success: function (data, status, jqXHR) {
+                    
+                    $("#loginArea").val(JSON.stringify(data));
+                },
+                error: function (data, textStatus, jQxhr) {
+                    $("#loginArea").val(JSON.stringify(data));
+                }
+
+            });
+
+        }
+        
+        
+        function lista() {
+            
+            $.ajax({
+                type: "POST",
+                url: "index.php?acao=lista"+"&hash="+$("#hash").val(),
+                success: function (data, status, jqXHR) {
+                    
+                    $("#listaArea").val(JSON.stringify(data));
+                },
+                error: function (data, textStatus, jQxhr) {
+                    $("#listaArea").val(JSON.stringify(data));
+                }
+
+            });
+
+        }
+        
+        function grupo() {
+            
+            $.ajax({
+                type: "POST",
+                url: "index.php?acao=grupo"+"&hash="+$("#hash").val(),
+                success: function (data, status, jqXHR) {
+                    
+                    $("#grupoArea").val(JSON.stringify(data));
+                },
+                error: function (data, textStatus, jQxhr) {
+                    $("#grupoArea").val(JSON.stringify(data));
+                }
+
+            });
+
+        }
+
+    </script>
+</html>
