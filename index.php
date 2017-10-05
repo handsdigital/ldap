@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
 
 include './config.php';
 include './ldap.php';
@@ -7,6 +10,7 @@ if (!isset($_REQUEST['acao']) or (!isset($_REQUEST['hash']) or $_REQUEST['hash']
     header('HTTP/1.0 403 Forbidden');
     exit;
 }
+
 $ldap = new acl_ldap();
 if ($_REQUEST['acao'] == 'lista') {
     $user = $ldap->getUsers();

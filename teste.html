@@ -74,7 +74,7 @@
             
             $.ajax({
                 type: "POST",
-                url: "index.php?acao=login&usuario="+$("#usuario").val()+"&senha="+$("#senha").val()+"&hash="+$("#hash").val(),
+                url: "index.php?acao=login&usuario="+$("#usuario").val()+"&senha="+$("#senha").val()+"&hash="+encodeURIComponent($("#hash").val()),
                 success: function (data, status, jqXHR) {
                     
                     $("#loginArea").val(JSON.stringify(data));

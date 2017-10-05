@@ -21,7 +21,7 @@ class acl_ldap {
         $this->ldapPort = _LDAP_PORT;
         $this->ldapMasterUser = _LDAP_USER;
         $this->ldapMasterPassword = _LDAP_PASS;
-        
+
         $this->erro = "";
 
         $this->username = _LDAP_USUARIO;
@@ -35,7 +35,10 @@ class acl_ldap {
     }
 
     protected function connect() {
-        $conn = ldap_connect($this->ldapHost, $this->ldapPort);
+        if (!($conn = ldap_connect($this->ldapHost, $this->ldapPort)))
+            die("Could not connect to ldap server");
+
+        
         ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
 
@@ -44,14 +47,18 @@ class acl_ldap {
     }
 
     public function getUsers($filtro = _LDAP_FILTRO_USER) {
-        $buscar = array(_LDAP_EMAIL,_LDAP_GRUPO, _LDAP_NOME,_LDAP_USUARIO);
-        $busca = ldap_search($this->conn, _LDAP_DN, $filtro,$buscar);
+        $buscar = array(_LDAP_EMAIL, _LDAP_GRUPO, _LDAP_NOME, _LDAP_USUARIO);
+
+        if (!($busca = @ldap_search($this->conn, _LDAP_DN, $filtro, $buscar)))
+            die("Não foi possível realizar busca no Active Directory");
+
+
         $users = ldap_get_entries($this->conn, $busca);
         $retorno = array();
-        
+
         foreach ($users as $v) {
-            if(!isset($v[_LDAP_NOME][0]) or !isset($v[_LDAP_EMAIL][0])){
-                
+            if (!isset($v[_LDAP_NOME][0]) or ! isset($v[_LDAP_EMAIL][0])) {
+
                 continue;
             }
             $retorno[] = array(
@@ -61,11 +68,11 @@ class acl_ldap {
                 'grupo' => $v[_LDAP_GRUPO][0],
             );
         }
-        
+
         return $retorno;
     }
-    
-    public function getGrupos(){
+
+    public function getGrupos() {
         $users = $this->getUsers();
         $grupos = array();
         foreach ($users as $v) {
@@ -75,7 +82,7 @@ class acl_ldap {
         foreach ($grupos as $v) {
             $retorno[]['nome'] = $v;
         }
-        
+
         return $retorno;
     }
 
@@ -111,7 +118,7 @@ class acl_ldap {
 
             $userLogin = ($this->ldapOS == "WINDOWS") ? $info[0]["$this->mail"][0] : $info[0]["dn"];
 
-            if (ldap_bind($this->conn, $userLogin, $password)) {
+            if (@ldap_bind($this->conn, $userLogin, $password)) {
 
                 $retorno['logged'] = true;
             } else {
@@ -129,7 +136,7 @@ class acl_ldap {
     }
 
     public function getMembers($group = FALSE, $inclusive = FALSE) {
-        
+
         // Begin building query
         if ($group)
             $query = "(&";
